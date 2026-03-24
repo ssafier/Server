@@ -27,13 +27,14 @@ setRunning(integer st) {
 
 default {
   state_entry() {
+    llLinksetDataReset();
     llSay(0, "Server is off (touch to switch on)");
     setRunning(FALSE);
   }
   
   touch_start(integer i) {
     if (llDetectedKey(0) == llGetOwner()) {
-      debug("Starting...");
+      llOwnerSay("Starting main server...");
       setRunning(TRUE);
       state run;
     }    

@@ -54,12 +54,18 @@ state waiting {
   
   link_message(integer from, integer channel, string n, key akey) {
     if (channel == regionEnter) {
-      integer p = llSubStringIndex(n, " Resident");
-      if (p != -1) n = llGetSubString(n, 0, p);
-      newbie = akey;
-      httpKey = llHTTPRequest(SERVER+"evolve/check/"+
-                        llEscapeURL((string) akey) + "/" + enigma(n),
-                        [], "");
+      list plist = llGetObjectDetails(newbie = akey, [OBJECT_POS]);
+      if (plist == []) return;
+      vector loc = (vector) plist[0];
+      string json = "{\"id\": \""+ (string) akey + "\", "+
+	"\"x\": " + (string) loc.x + ", " +
+	"\"y\": " + (string) loc.y + ", " +
+	"\"z\": " + (string) loc.z + "}";
+
+      httpKey = llHTTPRequest(SERVER+"region/enter",
+			      [HTTP_MIMETYPE, "application/json",
+			       HTTP_METHOD, "POST"],
+			      json);
     }
   }
 
@@ -79,6 +85,11 @@ state waiting {
 	  i--; 
 	  llRegionSayTo(newbie, 0, (string) announcement[i]);
 	}
+      }
+      string index = (string) llJsonGetValue(body,["index"]);
+      integer success = llLinksetDataWrite((string) newbie, index);
+      if (success != 0) {
+	llSay(0,(string) success);
       }
     }
     llMessageLinked(LINK_THIS,  registerAck, "", NULL_KEY);
