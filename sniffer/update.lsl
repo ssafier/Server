@@ -25,10 +25,14 @@
 #define debug(x)
 #endif
 
-#define statValue(s) llList2String(llParseString2List(s,[":"],[]),1)
-
 key me;
 key httpKey;
+
+string statValue(list s, string name) {
+  integer index = llListFindStrided(s, [name], 1, -1, 2);
+  if (index == -1) { llOwnerSay("can't find "+name); return ""; }
+  return (string) s[index + 1];
+}
 
 string enigma(string in) {
   string a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -49,29 +53,28 @@ string enigma(string in) {
 
 
 default {
-
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != 101) return;
-    list sml = llParseString2List(msg,["|"],[]);
-    string name = (string) sml[NAME];
+    list sml = llParseString2List(msg,["|", ":"],[]);
+    string name = (string) sml[llGetListLength(sml) - 1];
 
     string httprequest =  SERVER + "evolve/update/"+
       llEscapeURL((string) sml[UUID]) + "/" +
       enigma(name) + "?" +
-      "lvl=" + statValue((string) sml[level]) + 
-      "&str=" + statValue((string) sml[pure]) +
-      "&bonusStr=" + statValue((string) sml[str]) +
-      "&curSta=" + statValue((string) sml[STA]) +
-      "&maxSta=" + statValue((string) sml[maxsta]) +
-      "&gold=" + statValue((string) sml[money]) +
-      "&maxFat=" + statValue((string) sml[maxfat]) +
-      "&curFat=" + statValue((string) sml[curfat]) +
-      "&maxExp=" + statValue((string) sml[maxexp]) +
-      "&curExp=" + statValue((string) sml[curexp]) +
-      "&stat=" + llEscapeURL(statValue((string) sml[stat])) +
-      "&strexp=" + statValue((string) sml[strexp]) +
-      "&version=" + statValue((string) sml[version]) +
-      "&hc=" + llEscapeURL(statValue((string) sml[hudkey])) +
+      "lvl=" + statValue(sml, "LEVEL") + 
+      "&str=" + statValue(sml, "PURE_STRENGTH") +
+      "&bonusStr=" + statValue(sml, "BONUS_STRENGTH") +
+      "&curSta=" + statValue(sml, "CUR_STEMINA") +
+      "&maxSta=" + statValue(sml, "MAX_STEMINA") +
+      "&gold=" + statValue(sml, "MONEY") +
+      "&maxFat=" + statValue(sml, "MAX_FATIGUE") +
+      "&curFat=" + statValue(sml, "CUR_FATIGUE") +
+      "&maxExp=" + statValue(sml, "MAX_EXP") +
+      "&curExp=" + statValue(sml, "CUR_EXP") +
+      "&stat=" + llEscapeURL(statValue(sml, "CUR_STAT")) +
+      "&strexp=" + statValue(sml, "STRENGTH_EXP") +
+      "&version=" + statValue(sml, "VERSION") +
+      "&hc=" + llEscapeURL(statValue(sml, "HUD_KEY")) +
       "&name="+ llEscapeURL(name) +
       "&visit="+ (string) llGetUnixTime();
     debug(httprequest);
