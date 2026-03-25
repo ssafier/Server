@@ -56,7 +56,11 @@ default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != 101) return;
     list sml = llParseString2List(msg,["|", ":"],[]);
-    string name = (string) sml[llGetListLength(sml) - 1];
+    integer len = llGetListLength(sml);
+    if (len < 3) {
+      return;
+    }
+    string name = (string) sml[len - 1];
 
     string httprequest =  SERVER + "evolve/update/"+
       llEscapeURL((string) sml[UUID]) + "/" +
