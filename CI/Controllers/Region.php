@@ -9,15 +9,18 @@ use Psr\Log\LoggerInterface;
 
 use App\Models\Visits;
 use App\Models\Visitors;
-
+use App\Models\Roleplay;
+    
 use App\Entities\Visitor;
 use App\Entities\Visit;
+use App\Entities\Role;
 
 class Region extends BaseController
 {
     protected $helpers = ['url'];
     private $visitors;
     private $visits;
+    private $rp;
     
     public function initController(
         RequestInterface $request,
@@ -26,6 +29,7 @@ class Region extends BaseController
         parent::initController($request, $response, $logger);
         $this->visitors = new Visitors();
         $this->visits = new Visits();
+        $this->rp = new Roleplay();
     }
 
     public function enter() {
@@ -44,10 +48,26 @@ class Region extends BaseController
             $visitor->inserted_at = time();
             $vid = $this->visitors->insert($visitor);
             $retval['recognized'] = 'false';
+            $retval['roleplay'] = json_encode(array('enabled' => 0));
         } else {
             $visitor = $result[0];
             $vid = $visitor->id;
             $retval['recognized'] = 'true';
+            $result = $this->rp->where('avi =',$json['id'])->findAll();
+            if (!$result || count($result) == 0) {
+                $retval['roleplay'] = json_encode(array('enabled' => 0));
+            } else {
+                $r = $result[0];
+                $role = array('enabled' => $r->enabled);
+                $role['strength'] = $r->strength;
+                $role['intelligence'] = $r->intelligence;
+                $role['combat'] = $r->combat;
+                $role['power'] = $r->power;
+                $role['durability'] = $r->durability;
+                $role['tier'] = $r->tier;
+                $role['str_source'] = $r->str_source;
+                $retval['roleplay'] = json_encode($role);
+            }
         }
         $visit = new \App\Entities\Visit();
         $visit->avi = $vid;

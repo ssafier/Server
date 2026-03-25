@@ -2,9 +2,6 @@
 
 integer numAvatars = 0;
 
-list players = [];
-list pKeys = [];
-
 // state variables that keep track of comings and goings
 list priorVisitors = [];
 list currentVisitors = [];
@@ -31,9 +28,6 @@ initVars() {
   currentVisitorsKeys = [];
   newbies = [];
   newKeys = [];
-
-  players = [];
-  pKeys = [];
 }
 
 // scan the region and update game scripts of players in region.
@@ -53,9 +47,6 @@ initializeAgents() {
     // Can perform an experience check here and add to players only if in
     // experience.
     string name = llKey2Name(id);
-
-    players += [name];
-    pKeys += [id];
 
     // did somebody just arrive?
     // assume if reboot, nobody arrived
@@ -131,12 +122,12 @@ state run {
 	llRegionSay(regionListen, llDumpList2String(currentVisitorsKeys,","));
       }
       priorCount = llGetListLength(priorVisitors);
-      integer l = llGetListLength(players);
+      integer l = llGetListLength(currentVisitors);
       if (l == 0) return;
       integer i;
       string text ="";
       for (i = 0; i < l; ++i) {
-	string n = llGetSubString((string) players[i], 0, -9);
+	string n = llGetSubString((string) currentVisitors[i], 0, -9);
 	text = text + "\n" + n;
       }
       llSetText(text, COLOR, OPAQUE );
