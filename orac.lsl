@@ -15,7 +15,6 @@
 #define serverChannel ((integer)("0x"+llGetSubString((string)llGetKey(), -8, -1)))
 #endif
 
-key avi;
 list Q;
 
 default {
@@ -26,12 +25,15 @@ default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan == rezComputo) {
       if (Q == []) llSetTimerEvent(TIMER);
-      Q = Q + [xyzzy];
+      Q = Q + [msg + "|" + (string) xyzzy];
     }
   }
   timer() {
     if (Q == []) { llSetTimerEvent(0); return; }
-    avi = (key) Q[0];
+    string entry = (string) Q[0];
+    integer index = llSubStringIndex(entry,"|");
+    key avi = (key) llGetSubString(entry,index+1,-1);
+    entry = llGetSubString(entry,0,index-1); // json
     if (llGetListLength(Q) == 1)
       Q = [];
     else
@@ -43,6 +45,6 @@ default {
 			   REZ_VEL, ZERO_VECTOR, FALSE, FALSE,
 			   REZ_ROT, ZERO_ROTATION, FALSE,
 			   REZ_PARAM_STRING,
-			   (string) avi + "|" + (string) (vector) val[0]]);
+			   (string) avi + "|" + (string) (vector) val[0] + "|" + entry]);
   }
 }

@@ -18,8 +18,9 @@ default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != Position) return;
     GET_CONTROL;
-    vector a = llGetAgentSize(xyzzy);
-    if (a == ZERO_VECTOR) llDie(); // die if not in region
+    string temp;
+    POP(temp);
+    vector a = (vector) temp;
     list l = llGetObjectDetails(xyzzy, [OBJECT_POS]);
     if (l == []) llDie(); // not in region
     vector pos = (vector) l[0] + <0, 0, a.z * 1.125 * scale(a.z)>;

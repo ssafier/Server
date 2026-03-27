@@ -59,6 +59,8 @@ default {
   }
   
   timer() {
-    llMessageLinked(LINK_THIS, Position, s_Circle + "|" + (string) agent, agent);
+    vector a = llGetAgentSize(agent);
+    if (a == ZERO_VECTOR) llDie(); // die if not in region
+    llMessageLinked(LINK_THIS, Position, s_Circle + "|" + (string) a + "|" + (string) agent, agent);
   }
 } 

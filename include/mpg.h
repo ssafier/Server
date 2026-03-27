@@ -1,0 +1,6 @@
+#define StrengthText ["Weak.  The max weight is 200 lbs", "Normal.  Can lift body weight.", "Power lifter.", "Enhanced.  Max lift is between 3/4 of a ton to 25 tons.", "Superior.  Max lift is between 25 and 75 tons.", "Extreme.  Max lift is between 75 and 100 tons.","Incalculable.  Max lift is > 100 tons."]
+#define SpeedText ["Slow", "Normal human", "Elite human", "Supersonic", "Light speed", "Warp speed"]
+#define IntelligenceText ["Impaired", "Normal (IQ 100)", "Learned", "Gifted", "Genius", "Super-genius", "Omniscient"]
+#define CombatText ["Poor", "Normal", "Trained", "Experienced", "Master of single style", "Master of several forms of combat", "Master of all forms of combat"]
+#define EnergyText ["None", "On Contact", "Short Range", "Medium Range", "Long Range", "Multiple Energy Types", "Unlimited Command"]
+#define DurabilityText ["Frail", "Normal", "Enhanced", "Regenerative", "Bulletproof", "Impervious to most weapons", "Indestructable"]

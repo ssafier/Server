@@ -10,7 +10,6 @@
 #define Position 4
 #define Circle 5
 #define Welcome 6
-#define Check 7
 #define getLocations 8
 #define teleport 9
 #define select_location 10
@@ -20,13 +19,13 @@
 #define rezVampireMat 14
 #define poseAvatar 15
 #define avatarPose 16
+#define scanRolePlayer 17
 
 #define s_doMenu "2"
 #define s_warp "3"
 #define s_Position "4"
 #define s_Circle "5"
 #define s_Welcome "6"
-#define s_Check "7"
 #define s_getLocations "8"
 #define s_teleport "9"
 #define s_select_location "10"

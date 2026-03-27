@@ -1,4 +1,4 @@
-#include "evolve/server.h"
+#include "include/server.h"
 
 integer WELCOMEcard = 0;
 
@@ -86,12 +86,20 @@ state waiting {
 	  llRegionSayTo(newbie, 0, (string) announcement[i]);
 	}
       }
+      llMessageLinked(LINK_THIS, rezComputo, llJsonGetValue(body,["roleplay"]), newbie);
       string index = (string) llJsonGetValue(body,["index"]);
       integer success = llLinksetDataWrite((string) newbie, index);
       if (success != 0) {
 	llSay(0,(string) success);
       }
     }
+
+    if (llAgentInExperience(newbie)) {
+      llRequestExperiencePermissions(newbie, "");
+    }
     llMessageLinked(LINK_THIS,  registerAck, "", NULL_KEY);
+  }
+  experience_permissions(key avi) {
+    integer env = llReplaceAgentEnvironment(avi, 2, "Evolution");
   }
 }

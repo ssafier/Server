@@ -17,8 +17,8 @@ default {
     llSetLinkPrimitiveParamsFast(LINK_SET,
 				 [PRIM_COLOR, ALL_SIDES, <1,1,1>, 0]);
     llMessageLinked(LINK_THIS, warp,
-		    s_Welcome + "+" + s_Check + "+" + s_Position + "+" + s_Circle + "|" +
-		    (string) message[1] + "|" + (string) avi,
+		    s_Welcome + "+" + s_Position + "+" + s_Circle + "|" +
+		    (string) message[1] + "|" + (string) message[2] + "|" + (string) avi,
 		    avi);
   }
 }

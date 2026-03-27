@@ -54,7 +54,7 @@ initializeAgents() {
       debug("new visitor "+name);
       newbies += [name];
       newKeys += [id];
-      llMessageLinked(LINK_THIS, rezComputo, (string) id, id);
+
       currentVisitors = [name] + currentVisitors;
       currentVisitorsKeys = [id] + currentVisitorsKeys;
     } else {
