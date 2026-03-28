@@ -15,7 +15,7 @@ class Prototypes extends Model
     protected $returnType     = '\App\Entities\ProtoHero';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['id', 'name', 'strength', 'intelligence', 'speed', 'durability', 'power', 'combat', 'tier'];
+    protected $allowedFields = ['id', 'name', 'strength', 'intelligence', 'speed', 'durability', 'power', 'combat', 'alignment', 'tier'];
 
     // Dates
     protected $useTimestamps = true;

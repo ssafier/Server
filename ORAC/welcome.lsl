@@ -32,11 +32,13 @@ printMPG(list char, key avi) {
   list energy = EnergyText;
   list durability = DurabilityText;
   list intelligence = IntelligenceText;
+  list alignment = AlignmentText;
   llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength", strength)]);
   llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence", intelligence)]);
   llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat", combat)]);
   llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("energy", energy)]);
   llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability", durability)]);
+  llRegionSayTo(avi, 0, "Alignment: "+(string) alignment[getMPG("alignment", alignment)]);
 }
 
 default {
@@ -47,7 +49,7 @@ default {
     case Welcome: {
       string roleplay;
       POP(roleplay);
-      string rp_check = llJsonGetValue(roleplay,["strength","intelligence","combat","power","durability","tier"]);
+      string rp_check = llJsonGetValue(roleplay,["strength","intelligence","combat","power","durability","alignment","tier"]);
       character_rp = [];
       character_enabled = FALSE;
       if (rp_check != JSON_INVALID &&

@@ -4,3 +4,4 @@
 #define CombatText ["Poor", "Normal", "Trained", "Experienced", "Master of single style", "Master of several forms of combat", "Master of all forms of combat"]
 #define EnergyText ["None", "On Contact", "Short Range", "Medium Range", "Long Range", "Multiple Energy Types", "Unlimited Command"]
 #define DurabilityText ["Frail", "Normal", "Enhanced", "Regenerative", "Bulletproof", "Impervious to most weapons", "Indestructable"]
+#define AlignmentText ["Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "Neutral", "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"]

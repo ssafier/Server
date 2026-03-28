@@ -15,7 +15,7 @@ class Roleplay extends Model
     protected $returnType     = '\App\Entities\Role';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['id', 'avi', 'enabled', 'str_source', 'str', 'strength', 'intelligence', 'speed', 'durability', 'power', 'combat', 'tier'];
+    protected $allowedFields = ['id', 'avi', 'enabled', 'str_source', 'str', 'strength', 'intelligence', 'speed', 'durability', 'power', 'combat', 'alignment', 'tier'];
 
     // Dates
     protected $useTimestamps = true;

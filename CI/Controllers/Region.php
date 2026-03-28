@@ -64,6 +64,7 @@ class Region extends BaseController
                 $role['combat'] = $r->combat;
                 $role['power'] = $r->power;
                 $role['durability'] = $r->durability;
+                $role['alignment'] = $r->alignment;
                 $role['tier'] = $r->tier;
                 $role['str_source'] = $r->str_source;
                 $retval['roleplay'] = json_encode($role);

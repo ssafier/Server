@@ -16,6 +16,7 @@ class Role extends Entity {
         'durability' => 0,
         'power' => 0,
         'combat' => 0,
+        'alignment' => 0,
         'tier' => 0,
         'inserted_at' => null,
         'updated_at' => null,
@@ -33,6 +34,7 @@ class Role extends Entity {
         'durability' => 'integer',
         'power' => 'integer',
         'combat' => 'integer',
+        'alignment' => 'integer',
         'tier' => 'integer',
     ];
 }
