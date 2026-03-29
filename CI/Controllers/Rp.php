@@ -37,4 +37,15 @@ class Rp extends BaseController
         $retval = array();
         return $this->response->setJSON($retval);        
     }
+
+    public function getProtoHero($id) {
+        $proto = $this->prototypes->where('id >', $id)->findAll();
+        $hero = $proto[0];
+        $count = count($proto) - 1;
+        $result = array();
+        $result['remaining'] = $count;
+        $result['name'] = $hero->name;
+        $result['json'] = json_encode($hero);
+        return $this->response->setJSON($result);        
+    }
 }

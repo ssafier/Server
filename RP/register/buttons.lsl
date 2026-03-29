@@ -29,7 +29,7 @@ default {
     vector pos = llGetRootPosition() - llDetectedTouchPos(0);
     switch (llDetectedTouchFace(0)) {
     case 0: { // small buttons
-      if (pos.x < 0) {
+      if (pos.y < 0) {
 	// right button
 	llMessageLinked(LINK_ROOT, CONTROL_S_R, running, llDetectedKey(0));
       } else {
@@ -39,7 +39,7 @@ default {
       break;
     }
     case 1: { // big buttons
-      if (pos.x < 0) {
+      if (pos.y < 0) {
 	// right button
 	llMessageLinked(LINK_ROOT, CONTROL_B_R, running, llDetectedKey(0));
       } else {
@@ -49,7 +49,7 @@ default {
       break;
     }
     case 2: { // front panel
-      if (pos.x < 0) {
+      if (pos.y < 0) {
 	// right button
 	if (pos.x > 1.08) {
 	  llMessageLinked(LINK_ROOT, CONSOLE_4, running, llDetectedKey(0));

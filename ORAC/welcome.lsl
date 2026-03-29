@@ -35,6 +35,7 @@ printMPG(list char, key avi) {
   list alignment = AlignmentText;
   llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength", strength)]);
   llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence", intelligence)]);
+  llRegionSayTo(player, 0, "Speed: "+(string) speed[getMPG("speed", speed)]);
   llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat", combat)]);
   llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("energy", energy)]);
   llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability", durability)]);

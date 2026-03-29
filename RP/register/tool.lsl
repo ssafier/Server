@@ -26,8 +26,10 @@ default {
     switch (chan) {
     case RESET: {
       llSetTimerEvent(0);
+      msg = "";
     }
     case DESCEND: {
+      if (msg != "" && msg != "tool") return;
       llTargetOmega(llRot2Up(llGetLocalRot()), PI, 0);
       if (current_pos.z == (max_extend.z - size.z)) return;
       inc = -0.05;

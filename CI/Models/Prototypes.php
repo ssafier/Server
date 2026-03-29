@@ -7,7 +7,7 @@ use App\Entities\ProtoHero;
 
 class Prototypes extends Model
 {
-    protected $table      = 'protoypes';
+    protected $table      = 'prototypes';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
