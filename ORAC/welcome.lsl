@@ -33,9 +33,11 @@ printMPG(list char, key avi) {
   list durability = DurabilityText;
   list intelligence = IntelligenceText;
   list alignment = AlignmentText;
+  list speed = SpeedText;
+  
   llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength", strength)]);
   llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence", intelligence)]);
-  llRegionSayTo(player, 0, "Speed: "+(string) speed[getMPG("speed", speed)]);
+  llRegionSayTo(avi, 0, "Speed: "+(string) speed[getMPG("speed", speed)]);
   llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat", combat)]);
   llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("energy", energy)]);
   llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability", durability)]);
@@ -44,7 +46,8 @@ printMPG(list char, key avi) {
 
 default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
-    if (chan != Welcome) return;
+    if (chan != Welcome &&
+	chan != getCharacter) return;
     GET_CONTROL;
     switch (chan) {
     case Welcome: {
@@ -79,7 +82,7 @@ default {
     }
     case getCharacter: {
       if (character_enabled) {
-	PUSH(llDumpList2String(character_rp, "|"));
+	PUSH(llDumpList2String(character_rp, "+"));
       } else {
 	PUSH("-1");
       }

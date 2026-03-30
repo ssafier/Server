@@ -19,6 +19,7 @@ default {
       break;
     }
     case sendBack: {
+      debug("sending "+msg);      
       list l = llParseString2List(msg, ["|"], []);
       string channel = (string) l[llGetListLength(l)-1];
       string whom = (key)(string) l[llGetListLength(l) - 2];
@@ -31,12 +32,16 @@ default {
     }
   }
   listen(integer chan, string name, key xyzzy, string msg) {
-    GET_CONTROL;
+    LISTEN_CONTROL;
     string avi;
     POP(avi);
     debug(msg);
     debug(avi+" "+(string) avatar);
     if ((key) avi != avatar || avatar == NULL_KEY) return;
+    xyzzy = avatar;
+    debug("rest "+rest);
+    debug("seq " + seq);
+    UPDATE_NEXT(chan);
     NEXT_STATE;
   }
 }

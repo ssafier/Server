@@ -28,6 +28,7 @@
 
 string heros;
 key player;
+
 string protohero;
 list mpg;
 
@@ -36,10 +37,17 @@ integer display2;
 integer display3;
 integer display4;
 
+integer label1;
+integer label2;
+integer label3;
+integer label4;
+
 default {
   state_entry() {
     integer objectPrimCount = llGetObjectPrimCount(llGetKey());
     integer currentLinkNumber = 0;
+    display1 = display2 = display3 = display4 =
+      label1 = label2 = label3 = label4 = -1;
     while(currentLinkNumber <= objectPrimCount) {
       debug(currentLinkNumber);
       list params = llGetLinkPrimitiveParams(currentLinkNumber,[PRIM_NAME, PRIM_DESC]);
@@ -64,11 +72,38 @@ default {
 	}
 	default: break;
 	}
+	break;
+      }
+      case "label": {
+	switch((string) params[1]) {
+	case "1": {
+	  label1 = currentLinkNumber;
+	  break;
+	}
+	case "2": {
+	  label2 = currentLinkNumber;
+	  break;
+	}
+	case "3": {
+	  label3 = currentLinkNumber;
+	  break;
+	}
+	case "4": {
+	  label4 = currentLinkNumber;
+	  break;
+	}
+	default: break;
+	}
+	break;
       }
       default: break;
       }
       ++currentLinkNumber;
     }
+    if (display1 == -1 || display2 == -1 || display3 == -1 || display4 == -1 ||
+	label1 == -1 || label2 == -1 || label3 == -1 || label4 == -1)
+      llSay(0,"Can't find prims.");
+
     heros = llDumpList2String(
 			      llListSort(llLinksetDataListKeys(0, MAX_PROTOTYPES), 1, TRUE),
 			      "+") + "+Cancel";
@@ -76,13 +111,25 @@ default {
   }
 }
 
+#define reset_label(x) llSetLinkPrimitiveParamsFast(x, [PRIM_TEXTURE, ALL_SIDES, TEXTURE_BLANK, <1,1,0>, ZERO_VECTOR, 0,  PRIM_NORMAL, ALL_SIDES, NULL_KEY, <1,1,0>, ZERO_VECTOR, 0, PRIM_SPECULAR, ALL_SIDES, NULL_KEY, <1,1,0>, ZERO_VECTOR, 0, <1,0.5,0>, 60, 15, PRIM_COLOR, ALL_SIDES, <0,0,0>,1.0])
+#define set_label(l,t,c) llSetLinkPrimitiveParamsFast(l, [PRIM_TEXTURE, ALL_SIDES, t, <1,1,0>, ZERO_VECTOR, 270 * DEG_TO_RAD, PRIM_NORMAL, ALL_SIDES, t + "-norm", <1,1,0>, ZERO_VECTOR, 270 * DEG_TO_RAD, PRIM_SPECULAR, ALL_SIDES, t + "-spec", <1,1,0>, ZERO_VECTOR, 270 * DEG_TO_RAD, <1,0.5,0>, 60, 15, PRIM_COLOR, ALL_SIDES, c,1.0])
+
 state waiting {
+  state_entry() {
+    reset_label(label1);
+    reset_label(label2);
+    reset_label(label3);
+    reset_label(label4);
+  }
+
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != SETUP) return;
     GET_CONTROL;
+    string character;
+    POP(character);
     string answer;
     POP(answer);
-    llSay(0, (string) display2 + " " + (string) xyzzy);
+    llMessageLinked(display1, DISPLAY, character, xyzzy);
     llMessageLinked(display2, DISPLAY,"", xyzzy);
     switch (answer) {
     case "Custom": {
@@ -124,6 +171,13 @@ state mpg_hero {
       if (data == "") state waiting;
       mpg = llParseString2List(data,["|"],[]);
       protohero = answer;
+      llMessageLinked(display3, DISPLAY, protohero, player);
+      llMessageLinked(display4, DISPLAY,
+		      "strength+"+(string)mpg[0]+"+intelligence+"+(string)mpg[1]+
+		      "+speed+"+(string)mpg[2]+"+durability+"+(string)mpg[3]+
+		      "+power+"+(string)mpg[4]+"+combat+"+(string)mpg[5]+
+		      "+alignment+"+(string)mpg[6]+"+tier+"+(string)mpg[7],
+		      player);
       state check_hero;
     }
     }
@@ -132,6 +186,12 @@ state mpg_hero {
 
 state check_hero {
   state_entry() {
+    vector c = <0,1,0>;
+    set_label(label2, "accept", c);
+    c = <1,0,0>;
+    set_label(label1, "reject", c);
+    reset_label(label3);
+    reset_label(label4);
     llMessageLinked(LINK_SET, EXTEND, "", NULL_KEY);
     llSay(0,"DNA Resequencing...  Preparing "+protohero);
     list strength = StrengthText;
@@ -161,6 +221,8 @@ state check_hero {
       case CONTROL_S_R: {
 	llMessageLinked(LINK_SET, DESCEND, "dna", NULL_KEY);
 	llSay(0, "Resetting DNA specification...");
+	llMessageLinked(display3, RESET, "", NULL_KEY);
+	llMessageLinked(display4, RESET, "", NULL_KEY);
 	state mpg_hero;
 	break;
       }

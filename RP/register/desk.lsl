@@ -11,6 +11,7 @@
 #define SETUP 106
 #define MENU 107
 #define DISPLAY 108
+#define CORA 109
 
 integer strand;
 integer tool;
@@ -43,7 +44,9 @@ default {
       // buttons
       if (msg == "0") {
 	llMessageLinked(LINK_SET, POWER_ON, "", xyzzy);
-	llMessageLinked(LINK_THIS, MENU, (string) SETUP + "|Setup your character|Custom+MPG Hero", xyzzy);
+	llMessageLinked(LINK_THIS,
+			MENU, (string) CORA + "+" + (string) SETUP +
+			"|Setup your character|Custom+MPG Hero", xyzzy);
       }    
     }
   }
