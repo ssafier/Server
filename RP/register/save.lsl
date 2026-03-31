@@ -19,13 +19,35 @@
 
 key player;
 
+vector target = <0,0,1>;
+rotation target_rot = ZERO_ROTATION;
+vector local;
+// precompute parameters to update sit position
+integer link_num;
+float fAdjust;
+
+// -----------------------------------------------
+updateSitTarget(vector pos, rotation rot) {
+  llLinkSitTarget(LINK_THIS, pos, rot);
+  llSetLinkPrimitiveParamsFast(link_num,
+			       [PRIM_POS_LOCAL, (pos + <0.0, 0.0, 0.4> - (llRot2Up(rot) * fAdjust)) ,
+				PRIM_ROT_LOCAL, rot]);
+}
+
+// -----------------------------------------------
+checkUpdateSitTarget(vector t, rotation r) {
+  if (t != target || r != target_rot) updateSitTarget(target = t, target_rot = r);
+}
+
 default {
   state_entry() {
     llSetLinkPrimitiveParamsFast(LINK_THIS,
 				 [PRIM_SIT_FLAGS,
 				  // SIT_FLAG_ALLOW_UNSIT |
 				  SIT_FLAG_SCRIPTED_ONLY]);
-    llSitTarget(<0,0,1.25>,ZERO_ROTATION);
+    list l = llGetLinkPrimitiveParams(LINK_THIS, [PRIM_POS_LOCAL]);
+    target = (local = (vector) l[0]) + <0,0,1.25>;
+    llSitTarget(target,target_rot = ZERO_ROTATION);
   }
   
   link_message(integer from, integer chan, string msg, key xyzzy) {
@@ -35,6 +57,18 @@ default {
   experience_permissions(key avi) {
     integer sitTest = llSitOnLink(avi, LINK_THIS);
     if (sitTest != 1)  return;
+    vector size = llGetAgentSize(avi);
+    fAdjust = ((((0.008906 * size.z) + -0.049831) * size.z) + 0.088967) * size.z;
+    integer linkNum = llGetNumberOfPrims();
+    link_num = -1;
+    while(linkNum && link_num == -1) {
+      if (avi == llGetLinkKey(linkNum))
+	link_num = linkNum;
+      else
+	--linkNum;
+    }
+    llSetLinkPrimitiveParamsFast(link_num,
+				 [PRIM_POS_LOCAL, (target + <0.0, 0.0, 0.4> - (llRot2Up(target_rot) * fAdjust))]);
     llMessageLinked(LINK_ALL_OTHERS, SPARK, "start", player);
     player = avi;
     list anims = llGetAnimationList(avi);
@@ -76,6 +110,7 @@ state transfer_dna {
 state explode {
   state_entry() {
     llMessageLinked(LINK_ROOT, SAVE_CHAR, "", player);
+    checkUpdateSitTarget(local + <0,0,0.25>,ZERO_ROTATION);
     llParticleSystem([
 		      PSYS_PART_FLAGS,(0
 				       | PSYS_PART_EMISSIVE_MASK 
@@ -92,7 +127,7 @@ state explode {
 		      PSYS_PART_END_ALPHA,0.000000,
 		      PSYS_PART_START_SCALE,<1.00000, 1.50000, 0.00000>,
 		      PSYS_PART_END_SCALE,<3.00000, 3.00000, 0.00000>,
-		      PSYS_PART_MAX_AGE,6.000000,
+		      PSYS_PART_MAX_AGE,4.000000,
 		      PSYS_SRC_ACCEL,<0.00000, 0.00000, 0.00000>,
 		      PSYS_SRC_PATTERN,2,
 		      PSYS_SRC_TEXTURE,"fb6cbc26-d46a-1ae6-6127-f322ed6ebca6",
@@ -113,6 +148,7 @@ state explode {
     llStartAnimation("three");
     llSetTimerEvent(EXPLODE_1);
   }
+  
   timer() {
     llSetTimerEvent(0);
     llParticleSystem([]);
@@ -122,6 +158,7 @@ state explode {
 
 state explode2 {
   state_entry() { llSetTimerEvent(EXPLODE_2); }
+  
   timer() {
     llSetTimerEvent(0);
     state accept_power;
@@ -130,6 +167,7 @@ state explode2 {
 
 state accept_power {
   state_entry() {
+    checkUpdateSitTarget(local + <0,0,1.25>,ZERO_ROTATION);
     llRequestExperiencePermissions(player, "");
   }
   experience_permissions(key avi) {

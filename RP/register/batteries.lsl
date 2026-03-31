@@ -45,6 +45,8 @@ default {
     alpha += inc;
     if (inc > 0 && alpha >= max) inc = -update;
     if (inc < 0 && alpha <= 0.009) inc = update;
+    if (alpha < 0) alpha = 0;
+    if (alpha > max) alpha = max;
     llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_GLOW, ALL_SIDES, alpha]);
   }
 
