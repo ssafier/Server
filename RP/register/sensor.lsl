@@ -19,11 +19,13 @@ default {
   sensor(integer num) {
     if (in_range) return;
     in_range = TRUE;
+    llSetText("Click a button to activate.", <1,1,1>,1);
     llMessageLinked(LINK_SET, POWER_OFF, "", NULL_KEY);
   }
   no_sensor() {
     if (in_range == FALSE) return;
     in_range = FALSE;
+    llSetText("", <1,1,1>,1);
     llMessageLinked(LINK_SET, RESET, "", NULL_KEY);
   }
 }

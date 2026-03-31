@@ -16,6 +16,10 @@
 #define SETUP 106
 #define MENU 107
 #define DISPLAY 108
+#define SAVE_SEQUENCE 110
+#define SAVE_CHAR 111
+#define SPARK 112
+#define BATTERY 113
 
 #define CONSOLE_1 1
 #define CONSOLE_2 2
@@ -42,16 +46,32 @@ integer label2;
 integer label3;
 integer label4;
 
+integer seat;
+integer top;
+integer bottom;
+
 default {
   state_entry() {
     integer objectPrimCount = llGetObjectPrimCount(llGetKey());
     integer currentLinkNumber = 0;
     display1 = display2 = display3 = display4 =
-      label1 = label2 = label3 = label4 = -1;
+      label1 = label2 = label3 = label4 = seat = -1;
     while(currentLinkNumber <= objectPrimCount) {
       debug(currentLinkNumber);
       list params = llGetLinkPrimitiveParams(currentLinkNumber,[PRIM_NAME, PRIM_DESC]);
       switch((string) params[0]) {
+      case "seat": {
+	seat = currentLinkNumber;
+	break;
+      }
+      case "Cooling Top": {
+	top = currentLinkNumber;
+	break;
+      }
+      case "Cooling Bottom": {
+	bottom = currentLinkNumber;
+	break;
+      }
       case "display": {
 	switch((string) params[1]) {
 	case "1": {
@@ -131,7 +151,14 @@ state waiting {
     POP(answer);
     llMessageLinked(display1, DISPLAY, character, xyzzy);
     llMessageLinked(display2, DISPLAY,"", xyzzy);
+    llMessageLinked(top, BATTERY, "on", (key) "<1,0.6,0>");
+    llMessageLinked(bottom, BATTERY, "on", (key) "<0,1,1>");
     switch (answer) {
+    case "[time out]": {
+      llSay(0, "Time out.   Powering down.");
+      llMessageLinked(LINK_THIS, RESET, "", NULL_KEY);
+      break;
+    }
     case "Custom": {
       llSay(0, "Not supported yet.");
       break;
@@ -156,12 +183,24 @@ state mpg_hero {
 
   link_message(integer from, integer chan, string msg, key xyzyy) {
     if (chan == RESET) state waiting;
+    if (chan == CONTROL_S_L) {
+      llMessageLinked(LINK_THIS,
+		      MENU,
+		      (string) SETUP + "|Choose hero|" + heros,
+		      player);
+      return;
+    }
     if (chan != SETUP) return;
     GET_CONTROL;
     string answer;
     POP(answer);
     switch (answer) {
-    case "[time out]":
+    case "[time out]": {
+      llSay(0, "Menu has timed out.");
+      vector c = <0,1,1>;
+      set_label(label3, "menu", c);
+      break;
+    }
     case "Cancel": {
       state waiting;
       break;
@@ -192,7 +231,7 @@ state check_hero {
     set_label(label1, "reject", c);
     reset_label(label3);
     reset_label(label4);
-    llMessageLinked(LINK_SET, EXTEND, "", NULL_KEY);
+    llMessageLinked(LINK_SET, EXTEND, protohero, NULL_KEY);
     llSay(0,"DNA Resequencing...  Preparing "+protohero);
     list strength = StrengthText;
     list combat = CombatText;
@@ -228,7 +267,9 @@ state check_hero {
       }
       case CONTROL_B_L:
       case CONTROL_S_L: {
-	llSay(0, "save");
+	llMessageLinked(top, BATTERY, "up", (key) "<1,0.6,0>");
+	llMessageLinked(bottom, BATTERY, "up", (key) "<0,1,1>");
+	llMessageLinked(seat, SAVE_SEQUENCE, "", player);
 	break;
       }
       default: break;

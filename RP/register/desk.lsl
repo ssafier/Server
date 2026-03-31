@@ -12,6 +12,10 @@
 #define MENU 107
 #define DISPLAY 108
 #define CORA 109
+#define SAVE_SEQUENCE 110
+#define SAVE_CHAR 111
+#define SPARK 112
+#define BATTERY 113
 
 integer strand;
 integer tool;
@@ -43,10 +47,11 @@ default {
     if (chan > 0 && chan < 9) {
       // buttons
       if (msg == "0") {
+	llSetText("", <1,1,1>,1);
 	llMessageLinked(LINK_SET, POWER_ON, "", xyzzy);
 	llMessageLinked(LINK_THIS,
 			MENU, (string) CORA + "+" + (string) SETUP +
-			"|Setup your character|Custom+MPG Hero", xyzzy);
+			"|Setup your character|MPG Hero", xyzzy);
       }    
     }
   }
