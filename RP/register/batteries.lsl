@@ -1,4 +1,5 @@
 #define RESET 100
+#define POWER_OFF 104
 #define BATTERY 113
 float alpha;
 float inc;
@@ -7,7 +8,7 @@ float update;
 
 default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
-    if (chan == RESET) {
+    if (chan == RESET || chan == POWER_OFF) {
       llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_COLOR, ALL_SIDES, <1,1,1>, 1.0,
 					       PRIM_GLOW, ALL_SIDES, alpha = 0]);
       llSetTimerEvent(0);

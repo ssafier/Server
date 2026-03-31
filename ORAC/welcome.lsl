@@ -88,6 +88,18 @@ default {
       }
       break;
     }
+    case updateCharacter: {
+      string rp_check = llJsonGetValue(msg,["strength","intelligence","combat","power","durability","alignment","tier"]);
+      if (rp_check != JSON_INVALID &&
+	  rp_check != JSON_NULL) {
+	character_rp = llJson2List(msg);
+	integer index = llListFindStrided(character_rp, ["enabled"], 0, -1, 2);
+	string value = (string) character_rp[index + 1];
+	if (value == "true") character_enabled = TRUE;
+	llRegionSayTo(xyzzy, 0, "I have received an update to your roleplay character.");
+      }
+      break;
+    }
     default: break;
     }
     NEXT_STATE;

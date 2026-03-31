@@ -6,6 +6,7 @@
 #define EXTEND 101
 #define DESCEND 102
 #define POWER_ON 103
+#define POWER_OFF 104
 
 vector max_extend;
 vector size;
@@ -24,6 +25,7 @@ default {
 
   link_message(integer from, integer chan, string msg, key xyzzy) {
     switch (chan) {
+    case POWER_OFF:
     case RESET: {
       llSetTimerEvent(0);
       msg = "";

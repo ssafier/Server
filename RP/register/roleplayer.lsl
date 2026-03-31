@@ -50,6 +50,8 @@ integer seat;
 integer top;
 integer bottom;
 
+key request;
+
 default {
   state_entry() {
     integer objectPrimCount = llGetObjectPrimCount(llGetKey());
@@ -231,6 +233,7 @@ state check_hero {
     set_label(label1, "reject", c);
     reset_label(label3);
     reset_label(label4);
+    llSetText("Click button to acccept or reject transformation.", <1,1,1>,1);
     llMessageLinked(LINK_SET, EXTEND, protohero, NULL_KEY);
     llSay(0,"DNA Resequencing...  Preparing "+protohero);
     list strength = StrengthText;
@@ -251,8 +254,27 @@ state check_hero {
     llRegionSayTo(player, 0, "Alignment: "+(string) alignment[(integer)(string)mpg[6 ] - 1]);
   }
 
+  state_exit() {
+      llSetText("", <1,1,1>,0);
+  }
+
   link_message(integer from, integer chan, string msg, key xyzyy) {
     if (chan == RESET) state waiting;
+    if (chan == SAVE_CHAR) {
+      string json =
+	"{\"strength\": " + (string)mpg[0 ] + ", " +
+	"\"intelligence\": " + (string)mpg[1] + ", " +
+	"\"speed\": " + (string)mpg[2]   + ", " +
+	"\"combat\": " + (string)mpg[5] + ", " +
+	"\"energy\": " + (string)mpg[4] + ", " +
+	"\"durability\": " + (string)mpg[3] + ", " +
+	"\"alignment\": " + (string)mpg[6] + "}";
+      request = llHTTPRequest(SERVER+"/RP/save",
+			      [HTTP_MIMETYPE, "application/json",
+			       HTTP_METHOD, "POST"],
+			      json);
+      return;
+    }
     if (chan < 9) {
       if (msg == "0") state waiting;
       switch(chan) {
@@ -275,6 +297,16 @@ state check_hero {
       default: break;
       }
     }
+  }
+  http_response(key incoming, integer status, list meta, string body) {
+    if (incoming != request) return;
+    if (status != 200) {
+      llSay(0, "Save failed.  Try again.");
+    } else {
+      llShout(321,"503|" + (string) player + "|" + body);
+    }
+    llMessageLinked(LINK_SET, POWER_OFF, "", NULL_KEY);
+    state waiting;
   }
 }
 

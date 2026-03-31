@@ -5,9 +5,7 @@
 #define regionExit 33
 #define regionEnter 34
 #define regionDepart 40
-#define addPlayer -42
-#define regionGamePlayers 41
-#define getGamePlayers 42
+
 #define clockMsg 49
 #define rezComputo 10000
 

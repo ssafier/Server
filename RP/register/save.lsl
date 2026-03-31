@@ -178,7 +178,6 @@ state accept_power {
   timer() {
     llSetTimerEvent(0);
     llUnSit(player);
-    llMessageLinked(LINK_SET, RESET, "", NULL_KEY);
     state default;
   }
 }

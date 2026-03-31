@@ -1,4 +1,5 @@
 #define RESET 100
+#define POWER_OFF 104
 #define DISPLAY 108
 
 #ifndef StrCut
@@ -25,7 +26,7 @@ integer index = 0;
 
 default {
   link_message(integer from, integer chan, string msg, key alpha) {
-    if (chan == RESET) {
+    if (chan == RESET || chan == POWER_OFF) {
       llSetTimerEvent(0);
       llSetLinkPrimitiveParamsFast(LINK_THIS,
 				   [PRIM_TEXTURE, ALL_SIDES, TEXTURE_BLANK, <1,1,0>, ZERO_VECTOR, 0,

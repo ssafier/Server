@@ -1,4 +1,5 @@
 #define RESET 100
+#define POWER_OFF 104
 #define renderImage  108
 #define cFace ALL_SIDES
 
@@ -18,7 +19,7 @@ default {
   }
 
   link_message(integer from, integer chan, string msg, key alpha) {
-    if (chan == RESET) {
+    if (chan == RESET || chan == POWER_OFF) {
       llSetLinkPrimitiveParamsFast(LINK_THIS,
 				   [PRIM_TEXTURE, ALL_SIDES, TEXTURE_BLANK, <1,1,0>, ZERO_VECTOR, 0,
 				    PRIM_COLOR, ALL_SIDES, <0,0,0>,1.0]);

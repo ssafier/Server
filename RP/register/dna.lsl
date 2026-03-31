@@ -47,6 +47,7 @@ default {
 
   link_message(integer from, integer chan, string msg, key xyzzy) {
     switch (chan) {
+    case POWER_OFF:
     case RESET: {
       llSetTimerEvent(0);
       msg = "";

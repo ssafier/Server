@@ -1,4 +1,5 @@
 #define RESET 100
+#define POWER_OFF 104
 #define DISPLAY 108
 
 default {
@@ -6,11 +7,11 @@ default {
   }
 
   link_message(integer from, integer chan, string msg, key alpha) {
-    if (chan != DISPLAY && chan != RESET) return;
+    if (chan != DISPLAY && chan != RESET || chan != POWER_OFF) return;
       llSetLinkPrimitiveParamsFast(LINK_THIS,
 				   [PRIM_TEXTURE, ALL_SIDES, TEXTURE_BLANK, <1,1,0>, ZERO_VECTOR, 0,
 				    PRIM_COLOR, ALL_SIDES, <0,0,0>,1.0]);
-    if (chan == RESET) {
+    if (chan == RESET || chan == POWER_OFF) {
       return;
     }
     string texture = "";
