@@ -282,6 +282,7 @@ state check_hero {
       case CONTROL_S_R: {
 	llMessageLinked(LINK_SET, DESCEND, "dna", NULL_KEY);
 	llSay(0, "Resetting DNA specification...");
+	llSetText("", <1,1,1>,0);
 	llMessageLinked(display3, RESET, "", NULL_KEY);
 	llMessageLinked(display4, RESET, "", NULL_KEY);
 	state mpg_hero;
@@ -291,6 +292,7 @@ state check_hero {
       case CONTROL_S_L: {
 	llMessageLinked(top, BATTERY, "up", (key) "<1,0.6,0>");
 	llMessageLinked(bottom, BATTERY, "up", (key) "<0,1,1>");
+	llSetText("", <1,1,1>,0);
 	llMessageLinked(seat, SAVE_SEQUENCE, "", player);
 	break;
       }
