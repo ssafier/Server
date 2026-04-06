@@ -258,17 +258,19 @@ state check_hero {
       llSetText("", <1,1,1>,0);
   }
 
-  link_message(integer from, integer chan, string msg, key xyzyy) {
+  link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan == RESET) state waiting;
     if (chan == SAVE_CHAR) {
       string json =
-	"{\"strength\": " + (string)mpg[0 ] + ", " +
+	"{\"player\": \""+ (string) xyzzy + "\", " +
+	"\"strength\": " + (string)mpg[0 ] + ", " +
 	"\"intelligence\": " + (string)mpg[1] + ", " +
 	"\"speed\": " + (string)mpg[2]   + ", " +
 	"\"combat\": " + (string)mpg[5] + ", " +
 	"\"energy\": " + (string)mpg[4] + ", " +
 	"\"durability\": " + (string)mpg[3] + ", " +
 	"\"alignment\": " + (string)mpg[6] + "}";
+      debug(json);
       request = llHTTPRequest(SERVER+"/RP/save",
 			      [HTTP_MIMETYPE, "application/json",
 			       HTTP_METHOD, "POST"],

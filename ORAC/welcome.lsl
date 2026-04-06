@@ -53,7 +53,7 @@ default {
     case Welcome: {
       string roleplay;
       POP(roleplay);
-      string rp_check = llJsonGetValue(roleplay,["strength","intelligence","combat","power","durability","alignment","tier"]);
+      string rp_check = llJsonGetValue(roleplay,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
       character_rp = [];
       character_enabled = FALSE;
       if (rp_check != JSON_INVALID &&
@@ -89,7 +89,7 @@ default {
       break;
     }
     case updateCharacter: {
-      string rp_check = llJsonGetValue(msg,["strength","intelligence","combat","power","durability","alignment","tier"]);
+      string rp_check = llJsonGetValue(msg,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
       if (rp_check != JSON_INVALID &&
 	  rp_check != JSON_NULL) {
 	character_rp = llJson2List(msg);
