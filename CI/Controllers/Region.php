@@ -53,7 +53,7 @@ class Region extends BaseController
             $visitor = $result[0];
             $vid = $visitor->id;
             $retval['recognized'] = 'true';
-            $result = $this->rp->where('avi =',$json['id'])->findAll();
+            $result = $this->rp->where('avi =',$vid)->findAll();
             if (!$result || count($result) == 0) {
                 $retval['roleplay'] = json_encode(array('enabled' => 0));
             } else {

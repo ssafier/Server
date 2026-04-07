@@ -8,11 +8,11 @@
 #define SAVE_CHAR 111
 #define SPARK 112
 
-#define SIT_TIME 4 // 3.21 + .8
+#define SIT_TIME 3.5 // 3.21 + .8
 #define ELECTROCUTE 10.1 // 10.12 + .82
 #define EXPLODE_1 2
-#define EXPLODE_2 1.4 // 3.48 // 3.48 + .82
-#define RECOVER 5.5 // 4.88 + .82
+#define EXPLODE_2 1.3 // 3.48 // 3.48 + .82
+#define RECOVER 5.3 // 4.88 + .82
 
 #define explodeSTARTColor <0.00000, 1.00000, 1.00000>
 #define explodeENDColor <1.00000, 0.00000, 0.00000>

@@ -16,14 +16,31 @@ key request;
 list character_rp;
 integer character_enabled;
 
+integer JsonCheck(string json, list ks) {
+  integer l = llGetListLength(ks);
+  while (ks != []) {
+    string k = (string) ks[0];
+    string v = llJsonGetValue(json, [k]);
+    if (v == JSON_INVALID || v == JSON_NULL)  return FALSE;
+    if (l > 1) {
+      --l;
+      ks = llList2List(ks, 1, -1);
+    } else {
+      ks = [];
+      l = 0;
+    }
+  }
+  return TRUE;
+}    
+
 teleportEffect(key avi) {
   llParticleSystem(ATOM);
 }
 
-integer getMPG(string attr, list char) {
-  integer i = llListFindStrided(char, [attr], 0, -1, 2);
-  if (i != -1) return -1;
-  return (integer) char[i + 1] - 1;
+integer getMPG(string attr) {
+  integer i = llListFindStrided(character_rp, [attr], 0, -1, 2);
+  if (i == -1) return -1;
+  return (integer) character_rp[i + 1] - 1;
 }
 
 printMPG(list char, key avi) {
@@ -34,30 +51,30 @@ printMPG(list char, key avi) {
   list intelligence = IntelligenceText;
   list alignment = AlignmentText;
   list speed = SpeedText;
-  
-  llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength", strength)]);
-  llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence", intelligence)]);
-  llRegionSayTo(avi, 0, "Speed: "+(string) speed[getMPG("speed", speed)]);
-  llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat", combat)]);
-  llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("energy", energy)]);
-  llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability", durability)]);
-  llRegionSayTo(avi, 0, "Alignment: "+(string) alignment[getMPG("alignment", alignment)]);
+
+  llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength")]);
+  llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence")]);
+  llRegionSayTo(avi, 0, "Speed: "+(string) speed[getMPG("speed")]);
+  llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat")]);
+  llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("power")]);
+  llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability")]);
+  llRegionSayTo(avi, 0, "Alignment: "+(string) alignment[getMPG("alignment")]);
 }
 
 default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != Welcome &&
-	chan != getCharacter) return;
+	chan != getCharacter &&
+	chan != updateCharacter) return;
     GET_CONTROL;
     switch (chan) {
     case Welcome: {
       string roleplay;
       POP(roleplay);
-      string rp_check = llJsonGetValue(roleplay,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
+      integer rp_check = JsonCheck(roleplay,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
       character_rp = [];
       character_enabled = FALSE;
-      if (rp_check != JSON_INVALID &&
-	  rp_check != JSON_NULL) {
+      if (rp_check != FALSE) {
 	character_rp = llJson2List(roleplay);
 	integer index = llListFindStrided(character_rp, ["enabled"], 0, -1, 2);
 	string value = (string) character_rp[index + 1];
@@ -89,15 +106,15 @@ default {
       break;
     }
     case updateCharacter: {
-      string rp_check = llJsonGetValue(msg,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
-      if (rp_check != JSON_INVALID &&
-	  rp_check != JSON_NULL) {
+      msg = llGetSubString(msg, 1,-1);
+      integer rp_check = JsonCheck(msg,["strength","speed", "intelligence","combat","power","durability","alignment","tier"]);
+      if (rp_check  == TRUE) {
 	character_rp = llJson2List(msg);
 	integer index = llListFindStrided(character_rp, ["enabled"], 0, -1, 2);
 	string value = (string) character_rp[index + 1];
 	if (value == "true") character_enabled = TRUE;
 	llRegionSayTo(xyzzy, 0, "I have received an update to your roleplay character.");
-      }
+      } else llOwnerSay("Json check failed.");
       break;
     }
     default: break;
