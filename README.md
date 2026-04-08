@@ -16,11 +16,11 @@ user.
 A subserver occupies its own prim in second life, allowing for segregation of animations
 specific to subservers.
 
--- Animation server.  The animator.lsl script is repeated 10 times in the prim, each with a
+- Animation server.  The animator.lsl script is repeated 10 times in the prim, each with a
 different link number.  The animation server assigns avatars to specific scripts, which
 uses experiences to animate them.
 
--- Flying mats.  These are balloon-like vehicals that allow one user to *carry* another, as
+- Flying mats.  These are balloon-like vehicals that allow one user to *carry* another, as
 well as pose in the air.
 
 Each mat is rezzed and then warps to the user who summoned it.
