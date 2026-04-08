@@ -1,6 +1,7 @@
-#ifndef serverChannel
 #define serverChannel ((integer)("0x"+llGetSubString((string)llGetKey(), -4, -1)))
-#endif
+#define SUBSERVER_FORCE_DETACH -20240202
+#define SubServerChannel 20230929
+#define regionEmptyChan 20231027
 
 #define flexChannel 1000
 
@@ -19,3 +20,23 @@
 #define remoteAnimate1 2077
 #define remoteStop 2088
 #define setPlayer 2089
+
+#define clearPlayer 20222
+#define getPlayer1 20223
+#define getPlayer2 20224
+#define updatePlayer1 20225
+#define updatePlayer2 20226
+#define computeFight 20227
+#define takeMenu1 20228
+#define takeMenu2 20229
+#define killPlayer 20230
+#define killAndPause 20231
+
+#define s_clearPlayer "20222"
+#define s_getPlayer1 "20223"
+#define s_getPlayer2 "20224"
+#define s_updatePlayer1 "20225"
+#define s_updatePlayer2 "20226"
+#define s_computeFight "20227"
+#define s_takeMenu1 "20228"
+#define s_takeMenu2 "20229"
