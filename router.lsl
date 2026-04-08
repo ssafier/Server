@@ -1,8 +1,5 @@
 #include "include/server.h"
 
-
-
-
 #ifndef debug
 #define debug(x)
 #endif
@@ -16,8 +13,8 @@ integer handle;
 //subservers
 
 list servers = [
-		"animate", "48805eef-1d50-87b9-0212-0b41086dbc33",
-		"animate-menu", "48805eef-1d50-87b9-0212-0b41086dbc33",
+		"animate", "342a72ce-1a3e-fdf0-aa33-5f3153a41fec",
+		"animate-menu", "342a72ce-1a3e-fdf0-aa33-5f3153a41fec",
 		"crawl", "31bd4ae7-156f-5813-252f-27a6d774cb21",
 		"get-rezzables", "31bd4ae7-156f-5813-252f-27a6d774cb21",
 		"get-targetables", "31bd4ae7-156f-5813-252f-27a6d774cb21",

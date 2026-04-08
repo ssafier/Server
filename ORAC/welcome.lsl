@@ -52,13 +52,13 @@ printMPG(list char, key avi) {
   list alignment = AlignmentText;
   list speed = SpeedText;
 
-  llRegionSayTo(avi, 0, "Strength: "+(string) strength[getMPG("strength")]);
-  llRegionSayTo(avi, 0, "Intelligence: "+(string) intelligence[getMPG("intelligence")]);
-  llRegionSayTo(avi, 0, "Speed: "+(string) speed[getMPG("speed")]);
-  llRegionSayTo(avi, 0, "Combat: "+(string) combat[getMPG("combat")]);
-  llRegionSayTo(avi, 0, "Energy Projection: "+(string) energy[getMPG("power")]);
-  llRegionSayTo(avi, 0, "Durability: "+(string) durability[getMPG("durability")]);
-  llRegionSayTo(avi, 0, "Alignment: "+(string) alignment[getMPG("alignment")]);
+  llRegionSayTo(avi, 0, "   Strength: "+(string) strength[getMPG("strength")]);
+  llRegionSayTo(avi, 0, "   Intelligence: "+(string) intelligence[getMPG("intelligence")]);
+  llRegionSayTo(avi, 0, "   Speed: "+(string) speed[getMPG("speed")]);
+  llRegionSayTo(avi, 0, "   Combat: "+(string) combat[getMPG("combat")]);
+  llRegionSayTo(avi, 0, "   Energy Projection: "+(string) energy[getMPG("power")]);
+  llRegionSayTo(avi, 0, "   Durability: "+(string) durability[getMPG("durability")]);
+  llRegionSayTo(avi, 0, "   Alignment: "+(string) alignment[getMPG("alignment")]);
 }
 
 default {
@@ -179,6 +179,9 @@ default {
     }
     case "rp": {
       if (character_rp == []) {
+	llRegionSayTo(xyzzy, 0, "Teleporting you to TARDIS to enable roleplay abilities.");
+	llRegionSayTo(xyzzy, 0, "Find the transmuter and become more...");
+	llMessageLinked(LINK_THIS, teleport, "|<0,0,0>|<114.63093, 122.91805, 3751.83838>", xyzzy);
 	return;
       }
       switch ((string) tokens[1]) {
