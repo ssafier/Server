@@ -20,6 +20,8 @@
 #define poseAvatar 15
 #define avatarPose 16
 #define scanRolePlayer 17
+#define scanPlayerLocation 18
+#define scanPlayer 19
 
 #define s_doMenu "2"
 #define s_warp "3"

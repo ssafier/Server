@@ -128,14 +128,18 @@ default {
     switch ((string) tokens[0]) {
     case "help": {
       llRegionSayTo(xyzzy, 0, "help -- this message");
-      llRegionSayTo(xyzzy, 0, "teleport -- choose a location to visit");
+      if (character_rp == [] || character_enabled == FALSE)
+	llRegionSayTo(xyzzy, 0, "teleport -- choose a location to visit");
       llRegionSayTo(xyzzy, 0, "flymat -- a couple's flying pose mat");
       if (llAgentInExperience(xyzzy)) {
 	llRegionSayTo(xyzzy, 0, "pose -- various bodybuilder poses");
 	if (character_rp != []) {
 	  if (character_enabled) {
 	    llRegionSayTo(xyzzy, 0, "rp disable -- stop roleplaying");
-	    llRegionSayTo(xyzzy, 0, "scan -- find other players nearby");
+	    if (getMPG("power") > 0)
+	      llRegionSayTo(xyzzy, 0, "scan -- find other players nearby");
+	    if (getMPG("speed") > 2 || getMPG("power") > 2)
+	      llRegionSayTo(xyzzy, 0, "teleport -- choose a location to visit");
 	  } else {
 	    llRegionSayTo(xyzzy, 0, "rp enable -- start roleplaying");
 	  }
@@ -157,13 +161,20 @@ default {
       break;
     }
     case "teleport": {
-      teleportEffect(xyzzy);
-      llMessageLinked(LINK_THIS, getLocations, "|", xyzzy);
-      llSetTimerEvent(30);
+      if (character_rp == [] ||
+	  character_enabled == FALSE ||
+	  getMPG("speed") > 2 ||
+	  getMPG("power") > 2) {
+	teleportEffect(xyzzy);
+	llMessageLinked(LINK_THIS, getLocations, "|", xyzzy);
+	llSetTimerEvent(30);
+      }
       break;
     }
     case "scan": {
-      llMessageLinked(LINK_THIS, scanRolePlayer, "|", xyzzy);
+      integer power = getMPG("power");
+      if (power > 0)
+	llMessageLinked(LINK_THIS, scanRolePlayer, "|" + (string) power, xyzzy);
       break;
     }
     case "rp": {
@@ -172,15 +183,19 @@ default {
       }
       switch ((string) tokens[1]) {
       case "me": {
+	llRegionSayTo(xyzzy,0,"----");
+	llRegionSayTo(xyzzy,0,"You: ");
 	printMPG(character_rp, xyzzy);
 	break;
       }
       case "enable": {
 	character_enabled = TRUE;
+	llRegionSayTo(xyzzy, 0, "RP enabled.");
 	break;
       }
       case "disable": {
 	character_enabled = FALSE;
+	llRegionSayTo(xyzzy, 0, "RP disabled.");
 	break;
       }
       default: break;
