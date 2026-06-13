@@ -65,6 +65,7 @@ default {
   link_message(integer from, integer chan, string msg, key xyzzy) {
     if (chan != Welcome &&
 	chan != getCharacter &&
+	chan != forceRP &&
 	chan != updateCharacter) return;
     GET_CONTROL;
     switch (chan) {
@@ -89,20 +90,29 @@ default {
       if (size == ZERO_VECTOR) return;
       PUSH(size);
       handle = llListen(123, "",  avi, "");
-      llRegionSayTo(avi, 0, "Welcome " + llGetDisplayName(avi) +".  I am you personal interface to this region.");
+      string chat = "Welcome " + llGetDisplayName(avi) +".  I am you personal interface to this region, type '/123 help' for more information.";
       if (character_rp != []) {
-	llRegionSayTo(avi, 0, "I have loaded your roleplay character.");
+	chat = chat + "  I have loaded your roleplay character.";
       }
-      llRegionSayTo(avi, 0, "type '/123 help' for more information.");
+      llRegionSayTo(avi, 0, chat);
       llMessageLinked(LINK_THIS, coraCommand, (string) avi, avi);
       break;
     }
     case getCharacter: {
-      if (character_enabled) {
+      if (character_rp != []) {
 	PUSH(llDumpList2String(character_rp, "+"));
       } else {
 	PUSH("-1");
       }
+      break;
+    }
+    case forceRP: {
+      if (character_enabled) return;
+      character_enabled = TRUE;
+      integer index = llListFindList(character_rp, ["enabled"]);
+      if (index != -1)
+	character_rp = llListReplaceList(character_rp, ["enabled", 1], index, index + 1);
+      llRegionSayTo(xyzzy, 0, "You are in danger!  Powers enabled.");
       break;
     }
     case updateCharacter: {
@@ -141,7 +151,7 @@ default {
 	    if (getMPG("speed") > 2 || getMPG("power") > 2)
 	      llRegionSayTo(xyzzy, 0, "teleport -- choose a location to visit");
 	  } else {
-	    llRegionSayTo(xyzzy, 0, "rp enable -- start roleplaying");
+	    llRegionSayTo(xyzzy, 0, "rp on -- start roleplaying");
 	  }
 	  llRegionSayTo(xyzzy, 0, "rp me -- describe your character");
 	} else {
@@ -191,13 +201,19 @@ default {
 	printMPG(character_rp, xyzzy);
 	break;
       }
-      case "enable": {
+      case "on": {
 	character_enabled = TRUE;
+	integer index = llListFindList(character_rp, ["enabled"]);
+	if (index != -1)
+	  character_rp = llListReplaceList(character_rp, ["enabled", 1], index, index + 1);
 	llRegionSayTo(xyzzy, 0, "RP enabled.");
 	break;
       }
-      case "disable": {
+      case "off": {
 	character_enabled = FALSE;
+	integer index = llListFindList(character_rp, ["enabled"]);
+	if (index != -1)
+	  character_rp = llListReplaceList(character_rp, ["enabled", 0], index, index + 1);
 	llRegionSayTo(xyzzy, 0, "RP disabled.");
 	break;
       }

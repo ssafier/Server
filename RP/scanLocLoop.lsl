@@ -62,6 +62,10 @@ default {
     POP(s);
     agents = llParseString2List(s, ["+"], []);
     length = llGetListLength(agents);
+    if (length == 0) {
+      NEXT_STATE;
+      return;
+    }
     do { advance(); } while (agent == player && length > 0);
     if (agent == player) {
       llRegionSayTo(player, 0, "No one around.");
@@ -69,7 +73,8 @@ default {
       return;
     }
     llSetTimerEvent(1.5);
-    llRegionSay(321,"502+999|" + (string) agent + "|" + (string)llGetKey() + "|" + (string) mychan);
+    string k = (string) llGetKey();
+    llRegionSay(321,"502+999|" + (string) agent + "|" + k + "|" + (string) mychan);
   }
 
   listen(integer chan, string name, key xyzzy, string msg) {
@@ -104,7 +109,7 @@ default {
       list intelligence = IntelligenceText;
       list alignment = AlignmentText;
       list speed = SpeedText;
-      list rp = llJson2List((string) params[1]);
+      list rp = llParseString2List((string) params[1],["+"],[]);
       integer index = llListFindStrided(rp, ["enabled"], 0, -1, 2);
       string value = (string) rp[index + 1];
       if (value != "true") {

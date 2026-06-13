@@ -23,8 +23,8 @@ default {
       list l = llParseString2List(msg, ["|"], []);
       string channel = (string) l[llGetListLength(l)-1];
       string whom = (key)(string) l[llGetListLength(l) - 2];
-      debug(channel + " " + (string) whom + "|" + llDumpList2String(llList2List(l,0,-2), "|"));
-      llRegionSay((integer) channel, (string) whom + "|" + llDumpList2String(llList2List(l,0,-3), "|"));
+      debug(channel + " " + (string) whom + "|" + llDumpList2String(llList2List(l,1,-3), "|"));
+      llRegionSay((integer) channel, (string) whom + "|" + llDumpList2String(llList2List(l,1,-3), "|"));
 
       break;
     }

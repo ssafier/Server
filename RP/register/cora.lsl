@@ -35,6 +35,7 @@ default {
     if (llGetKey() != (key)(string)params[0]) return;
     llSetTimerEvent(0);
     llListenControl(handle, FALSE);
+    llSay(0, msg);
     if ((string)params[1] != "-1") {
       PUSH((string)params[1]);
     } else {

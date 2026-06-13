@@ -31,7 +31,7 @@ class Region extends BaseController
         $this->visits = new Visits();
         $this->rp = new Roleplay();
     }
-
+ 
     public function enter() {
         $json = $this->request->getJSON(true); // Get JSON as an associative array
         if (!$json) {

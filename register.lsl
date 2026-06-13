@@ -79,8 +79,6 @@ state waiting {
 	llGiveInventory(newbie, llGetInventoryName(INVENTORY_NOTECARD, WELCOMEcard));
       } else if (check == "true") {
 	integer i = llGetListLength(announcement);
-	llRegionSayTo(newbie, 0,
-		      "Welcome " + llGetDisplayName(newbie) + " to Evolution!");
 	while (i > 0) {
 	  i--; 
 	  llRegionSayTo(newbie, 0, (string) announcement[i]);

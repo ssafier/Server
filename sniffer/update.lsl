@@ -30,7 +30,7 @@ key httpKey;
 
 string statValue(list s, string name) {
   integer index = llListFindStrided(s, [name], 1, -1, 2);
-  if (index == -1) { llOwnerSay("can't find "+name); return ""; }
+  if (index == -1) return "";
   return (string) s[index + 1];
 }
 

@@ -90,10 +90,10 @@ default {
       if (a != NULL_KEY) {
 	agents = [a] + agents;
       }
-      llMessageLinked(LINK_THIS,
-		      scanPlayer, "|" + llDumpList2String(agents, "+"),
-		      player);
     }
+    llMessageLinked(LINK_THIS,
+		    scanPlayer, "|" + llDumpList2String(agents, "+"),
+		    player);
   }
 }
     
