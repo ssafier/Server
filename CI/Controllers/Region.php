@@ -68,6 +68,33 @@ class Region extends BaseController
                 $role['speed'] = $r->speed;
                 $role['tier'] = $r->tier;
                 $role['str_source'] = $r->str_source;
+                $db = \Config\Database::connect();
+        
+                $builder = $db->table('prototypes p');
+                $builder->select('p.id AS prototype_id, p.name AS prototype_name, p.strength, p.intelligence, p.speed, p.durability, p.power, p.combat, p.alignment');
+
+                // 2. Use PHP's sprintf() to dynamically inject the player's stats into the math.
+                // Because we are injecting standard integers, we can drop the 's.column' CASTs entirely.
+                $math = sprintf(
+                    "SQRT(
+            POW(CAST(p.strength AS SIGNED) - %d, 2) +
+            POW(CAST(p.intelligence AS SIGNED) - %d, 2) +
+            POW(CAST(p.speed AS SIGNED) - %d, 2) +
+            POW(CAST(p.durability AS SIGNED) - %d, 2) +
+            POW(CAST(p.power AS SIGNED) - %d, 2) +
+            POW(CAST(p.combat AS SIGNED) - %d, 2) +
+            POW(CAST(p.alignment AS SIGNED) - %d, 2)
+                              ) AS vector_distance",
+                    $r->strength,  $r->intelligence, $r->speed, $r->durability,$r->power,   $r->combat, $r->alignment);
+        
+                // Again, pass false to prevent escaping
+                $builder->select($math, false);
+    
+                $builder->orderBy('vector_distance', 'ASC');
+                $builder->limit(1);
+
+                $result = $builder->get()->getRow();
+                $role['proto'] = $result->prototype_name;
                 $retval['roleplay'] = json_encode($role);
             }
         }
