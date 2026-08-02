@@ -1,6 +1,5 @@
 #include "include/controlstack.h"
-
-#define doMenu 107
+#include "src/animesh/include/animesh.h"
 
 #ifndef debug
 #define debug(x)
@@ -40,15 +39,15 @@ Menu(string text, key agent) {
   list Buttons;
   integer All = llGetListLength(menu_items);
   if(menuIter >= 9) {  //This is NOT the first menu page
-    Buttons += Backward;
       if((All - menuIter) > 11)  {// This is not the last page
-	Buttons += Forward;
+	Buttons = [Forward] + llList2List(menu_items,menuIter+1,menuIter+1) + [Backward];
       } else {    // This IS the last page
+	Buttons = llList2List(menu_items,menuIter+1,menuIter+2) + [Backward];
 	Last = TRUE;
       }            
   } else if (All > menuIter+9) { // This IS the first page
     if((All - menuIter) > 11)  { // There are more pages to follow
-      Buttons += Forward;
+      Buttons = [Forward] + Buttons;
     } else {    // This IS the last page
       Last = TRUE;
     }            
@@ -76,6 +75,13 @@ default {
   }
 
   link_message(integer from, integer chan, string msg, key xyzzy) {
+    if (chan == menuOff) {
+      if (handle != -1) {
+	llListenControl(handle, FALSE);
+      }
+      llSetTimerEvent(0);
+      return;
+    }
     if (chan == doMenu) {
       string seq;
       string n;
